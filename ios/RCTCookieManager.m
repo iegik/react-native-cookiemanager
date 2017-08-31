@@ -24,7 +24,7 @@ RCT_EXPORT_METHOD(set:(NSDictionary *)props callback:(RCTResponseSenderBlock)cal
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
 
-    callback(@"success");
+    callback(@[cookie, @"success"]);
 }
 
 
@@ -33,7 +33,7 @@ RCT_EXPORT_METHOD(clearAll:(RCTResponseSenderBlock)callback) {
     for (NSHTTPCookie *c in cookieStorage.cookies) {
         [cookieStorage deleteCookie:c];
     }
-    callback(@"success");
+    callback(@[cookieStorage.cookies, @"success"]);
 }
 
 // TODO: return a better formatted list of cookies per domain
