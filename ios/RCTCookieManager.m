@@ -27,8 +27,22 @@ RCT_EXPORT_METHOD(set:(NSDictionary *)props callback:(RCTResponseSenderBlock)cal
     callback(@[cookie, @"success"]);
 }
 
+RCT_EXPORT_METHOD(get:(NSDictionary *)props callback:(RCTResponseSenderBlock)callback) {
+    NSString *name = [RCTConvert NSString:props[@"name"]];
+    NSString *value = [RCTConvert NSString:props[@"value"]];
+    NSString *domain = [RCTConvert NSString:props[@"domain"]];
+    NSString *origin = [RCTConvert NSString:props[@"origin"]];
+    NSString *path = [RCTConvert NSString:props[@"path"]];
+    NSDate *expiration = [RCTConvert NSDate:props[@"expiration"]];
 
-RCT_EXPORT_METHOD(clearAll:(RCTResponseSenderBlock)callback) {
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (NSHTTPCookie *c in cookieStorage.cookies) {
+        [cookies setObject:c.name forKey:c.value];
+    }
+    callback(@[cookies, @"success"]);
+}
+
+RCT_EXPORT_METHOD(removeAllCookies:(RCTResponseSenderBlock)callback) {
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *c in cookieStorage.cookies) {
         [cookieStorage deleteCookie:c];
